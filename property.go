@@ -119,8 +119,9 @@ type IANAProperty struct {
 var (
 	propertyIanaTokenReg  = regexp.MustCompile("[A-Za-z0-9-]{1,}")
 	propertyParamNameReg  = propertyIanaTokenReg
-	propertyParamValueReg = regexp.MustCompile("^(?:\"(?:[^\"\\\\]|\\[\"nrt])*\"|[^,;\\\\:\"]*)")
-	propertyValueTextReg  = regexp.MustCompile("^.*")
+	propertyParamValueReg = regexp.MustCompile(`^((\"[^"]+\")|([^;,:]+))`)
+	//propertyParamValueReg = regexp.MustCompile("^(?:\"(?:[^\"\\\\]|\\[\"nrt])*\"|[^,;\\\\:\"]*)")
+	propertyValueTextReg = regexp.MustCompile("^.*")
 )
 
 type ContentLine string
@@ -140,7 +141,8 @@ func ParseProperty(contentLine ContentLine) *BaseProperty {
 		if p >= len(contentLine) {
 			return nil
 		}
-		switch rune(contentLine[p]) {
+		rrr := rune(contentLine[p])
+		switch rrr {
 		case ':':
 			return parsePropertyValue(r, string(contentLine), p+1)
 		case ';':
@@ -174,7 +176,8 @@ func parsePropertyParam(r *BaseProperty, contentLine string, p int) (*BaseProper
 		if p >= len(contentLine) {
 			return nil, p
 		}
-		tokenPos = propertyParamValueReg.FindIndex([]byte(contentLine[p:]))
+		cLine := contentLine[p:]
+		tokenPos = propertyParamValueReg.FindIndex([]byte(cLine))
 		if tokenPos == nil {
 			return nil, p
 		}
