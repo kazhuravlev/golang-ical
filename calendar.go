@@ -497,24 +497,24 @@ func ParseCalendar(r io.Reader) (*Calendar, error) {
 }
 
 type CalendarStream struct {
-	r io.Reader
-	b *bufio.Reader
+	src io.Reader
+	buf *bufio.Reader
 }
 
-func NewCalendarStream(r io.Reader) *CalendarStream {
+func NewCalendarStream(src io.Reader) *CalendarStream {
 	return &CalendarStream{
-		r: r,
-		b: bufio.NewReader(r),
+		src: src,
+		buf: bufio.NewReader(src),
 	}
 }
 
 func (cs *CalendarStream) ReadLine() (*ContentLine, error) {
-	r := []byte{}
+	var r []byte
 	c := true
 	var err error
 	for c {
 		var b []byte
-		b, err = cs.b.ReadBytes('\n')
+		b, err = cs.buf.ReadBytes('\n')
 		if len(b) == 0 {
 			if err == nil {
 				continue
@@ -526,7 +526,7 @@ func (cs *CalendarStream) ReadLine() (*ContentLine, error) {
 			if len(b) > 1 && b[len(b)-2] == '\r' {
 				o = 2
 			}
-			p, err := cs.b.Peek(1)
+			p, err := cs.buf.Peek(1)
 			r = append(r, b[:len(b)-o]...)
 			if err == io.EOF {
 				c = false
@@ -534,7 +534,7 @@ func (cs *CalendarStream) ReadLine() (*ContentLine, error) {
 			if len(p) == 0 {
 				c = false
 			} else if p[0] == ' ' {
-				cs.b.Discard(1) // nolint:errcheck
+				cs.buf.Discard(1) // nolint:errcheck
 			} else {
 				c = false
 			}
