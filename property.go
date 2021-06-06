@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"log"
 	"regexp"
 	"strconv"
 	"strings"
@@ -118,28 +117,11 @@ type IANAProperty struct {
 }
 
 var (
-	propertyIanaTokenReg  *regexp.Regexp
-	propertyParamNameReg  *regexp.Regexp
-	propertyParamValueReg *regexp.Regexp
-	propertyValueTextReg  *regexp.Regexp
+	propertyIanaTokenReg  = regexp.MustCompile("[A-Za-z0-9-]{1,}")
+	propertyParamNameReg  = propertyIanaTokenReg
+	propertyParamValueReg = regexp.MustCompile("^(?:\"(?:[^\"\\\\]|\\[\"nrt])*\"|[^,;\\\\:\"]*)")
+	propertyValueTextReg  = regexp.MustCompile("^.*")
 )
-
-func init() {
-	var err error
-	propertyIanaTokenReg, err = regexp.Compile("[A-Za-z0-9-]{1,}")
-	if err != nil {
-		log.Panicf("Failed to build regex: %v", err)
-	}
-	propertyParamNameReg = propertyIanaTokenReg
-	propertyParamValueReg, err = regexp.Compile("^(?:\"(?:[^\"\\\\]|\\[\"nrt])*\"|[^,;\\\\:\"]*)")
-	if err != nil {
-		log.Panicf("Failed to build regex: %v", err)
-	}
-	propertyValueTextReg, err = regexp.Compile("^.*")
-	if err != nil {
-		log.Panicf("Failed to build regex: %v", err)
-	}
-}
 
 type ContentLine string
 
