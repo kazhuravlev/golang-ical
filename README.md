@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-	const calendarURL = "https://ical.mac.com/ical/Irish32Holidays.ics"
+	const calendarURL = "https://calendar.google.com/calendar/ical/en.russian%23holiday%40group.v.calendar.google.com/public/basic.ics"
 	resp, err := http.Get(calendarURL)
 	if err != nil {
 		panic(err)
