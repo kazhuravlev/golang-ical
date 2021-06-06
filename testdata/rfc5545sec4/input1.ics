@@ -13,5 +13,8 @@ SUMMARY:Networld+Interop Conference
 DESCRIPTION:Networld+Interop Conference
   and Exhibit\nAtlanta World Congress Center\n
  Atlanta\, Georgia
+X-APPLE-STRUCTURED-LOCATION;VALUE=URI;X-ADDRESS="Берсеневская набережная 6\
+ \\\nМосква\\nМосква\\n\\n119072";X-APPLE-RADIUS=44.91328504224796;X-TITLE="
+ Берсеневская набережная 6":geo:51.740176,35.608891
 END:VEVENT
 END:VCALENDAR
