@@ -12,7 +12,7 @@ import (
 )
 
 type BaseProperty struct {
-	IANAToken      string
+	IANAToken      Property
 	ICalParameters map[string][]string
 	Value          string
 }
@@ -152,7 +152,7 @@ func ParseProperty(contentLine ContentLine) *BaseProperty {
 		return nil
 	}
 	p := 0
-	r.IANAToken = string(contentLine[p+tokenPos[0] : p+tokenPos[1]])
+	r.IANAToken = Property(contentLine[p+tokenPos[0] : p+tokenPos[1]])
 	p += tokenPos[1]
 	for {
 		if p >= len(contentLine) {

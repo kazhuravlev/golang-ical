@@ -364,7 +364,7 @@ func (calendar *Calendar) SetTzid(s string, props ...PropertyParameter) {
 
 func (calendar *Calendar) setProperty(property Property, value string, props ...PropertyParameter) {
 	for i := range calendar.CalendarProperties {
-		if calendar.CalendarProperties[i].IANAToken == string(property) {
+		if calendar.CalendarProperties[i].IANAToken == property {
 			calendar.CalendarProperties[i].Value = value
 			calendar.CalendarProperties[i].ICalParameters = map[string][]string{}
 			for _, p := range props {
@@ -376,7 +376,7 @@ func (calendar *Calendar) setProperty(property Property, value string, props ...
 	}
 	r := CalendarProperty{
 		BaseProperty{
-			IANAToken:      string(property),
+			IANAToken:      property,
 			Value:          value,
 			ICalParameters: map[string][]string{},
 		},
@@ -391,7 +391,12 @@ func (calendar *Calendar) AddEvent(id string) *VEvent {
 	e := &VEvent{
 		ComponentBase{
 			Properties: []IANAProperty{
-				{BaseProperty{IANAToken: ToText(string(ComponentPropertyUniqueId)), Value: id}},
+				{
+					BaseProperty{
+						IANAToken: PropertyUid,
+						Value:     id,
+					},
+				},
 			},
 		},
 	}
